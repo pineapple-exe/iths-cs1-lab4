@@ -6,11 +6,13 @@ namespace VocabularyTest.ConsoleApp
 {
     class Program
     {
-        static void Main2(string[] args)
+        static void Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.WriteLine("You must specify command.");
+                Console.WriteLine();
+                PrintCommandHelp();
                 return;
             }
 
@@ -34,6 +36,8 @@ namespace VocabularyTest.ConsoleApp
                         if (args.Length < 4)
                         {
                             Console.WriteLine("Listname or language missing.");
+                            Console.WriteLine();
+                            PrintCommandHelp();
                             return;
                         }
                         else if (WordList.GetLists().Contains(args[1]))
@@ -53,6 +57,8 @@ namespace VocabularyTest.ConsoleApp
                         if (args.Length < 2)
                         {
                             Console.WriteLine("Listname missing.");
+                            Console.WriteLine();
+                            PrintCommandHelp();
                             return;
                         }
                         Add(args[1]);
@@ -63,6 +69,8 @@ namespace VocabularyTest.ConsoleApp
                         if (args.Length < 4)
                         {
                             Console.WriteLine("Listname, language or word missing.");
+                            Console.WriteLine();
+                            PrintCommandHelp();
                             return;
                         }
                         Remove(args[1], args[2], args.Skip(3).ToArray());
@@ -73,6 +81,8 @@ namespace VocabularyTest.ConsoleApp
                         if (args.Length < 2)
                         {
                             Console.WriteLine("Listname or language missing.");
+                            Console.WriteLine();
+                            PrintCommandHelp();
                             return;
                         }
 
@@ -91,6 +101,8 @@ namespace VocabularyTest.ConsoleApp
                         if (args.Length < 2)
                         {
                             Console.WriteLine("Listname missing.");
+                            Console.WriteLine();
+                            PrintCommandHelp();
                             return;
                         }
 
@@ -102,6 +114,8 @@ namespace VocabularyTest.ConsoleApp
                         if (args.Length < 2)
                         {
                             Console.WriteLine("Listname missing.");
+                            Console.WriteLine();
+                            PrintCommandHelp();
                             return;
                         }
 
@@ -110,14 +124,7 @@ namespace VocabularyTest.ConsoleApp
 
                     default:
 
-                        Console.WriteLine("Use any of the following parameters:");
-                        Console.WriteLine("-lists");
-                        Console.WriteLine("-new <list name> <language 1> <language 2> .. <language n>");
-                        Console.WriteLine("-add <list name>");
-                        Console.WriteLine("-remove <list name> <language> <word 1> <word 2> .. <word n>");
-                        Console.WriteLine("-words <listname> <sortByLanguage>");
-                        Console.WriteLine("-count <listname>");
-                        Console.WriteLine("-practice <listname>");
+                        PrintCommandHelp();
                         break;
                 }
             }
@@ -128,7 +135,7 @@ namespace VocabularyTest.ConsoleApp
             }
         }
 
-        static void New(string name, string[] languages)//Skapar ett objekt, en lista, samt låter användaren lägga till ord.
+        static void New(string name, string[] languages)
         {
             WordList wordList = new WordList(name, languages);
             wordList.Save();
@@ -156,6 +163,10 @@ namespace VocabularyTest.ConsoleApp
                     {
                         Console.WriteLine($"Add the translation, in {theWordList.Languages[i]}.");
                         userInput = Console.ReadLine();
+                        if (userInput == "")
+                        {
+                            return;
+                        }
                         wordRainbow[i] = userInput;
                     }
                     theWordList.Add(wordRainbow);
@@ -228,7 +239,7 @@ namespace VocabularyTest.ConsoleApp
         {
             foreach (string translation in translations)
             {
-                Console.Write(translation + "   ");
+                Console.Write($"{translation, -20}");
             }
             Console.WriteLine();
         }
@@ -242,6 +253,7 @@ namespace VocabularyTest.ConsoleApp
         {
             WordList listToPractice = WordList.LoadList(name);
             int wordsCount = 0;
+            int points = 0;
 
             if (listToPractice.Count() == 0)
             {
@@ -257,6 +269,7 @@ namespace VocabularyTest.ConsoleApp
                 Console.WriteLine($"Translate from {fromLanguage} to {toLanguage}...");
                 Console.Write($"{wordOfPractice.Translations[wordOfPractice.FromLanguage]}    :    ");
                 string userInput = Console.ReadLine();
+                Console.Clear();
 
                 if (userInput == "")
                 {
@@ -265,6 +278,7 @@ namespace VocabularyTest.ConsoleApp
 
                 else if (userInput.ToLower() == wordOfPractice.Translations[wordOfPractice.ToLanguage].ToLower())
                 {
+                    points++;
                     Console.WriteLine("Correct.");
                 }
 
@@ -275,19 +289,19 @@ namespace VocabularyTest.ConsoleApp
                 wordsCount++;
                 Console.WriteLine();
             }
-            Console.WriteLine($"Practiced words: {wordsCount}");
+            Console.WriteLine($"You nailed {points} out of {wordsCount}.");
         }
 
-        static void Main(string[] args)
+        static void PrintCommandHelp()
         {
-            //string[] test = new string[] { "new", "firstList", "Swedish", "English", "German" };
-            //string[] test = new string[] { "remove", "firstList", "German", "Life", "Humour", "Herbst", "bratwurst" };
-            //string[] test = new string[] { "add", "firstList" };
-            string[] test = new string[] { "practice", "NewList2" };
-            //string[] test = new string[] { "words", "firstList", "german", "hallo", "bratwurst" };
-            //string[] test = new string[] { "lists" };
-            //string[] test = new string[] { "count", "NewList2" };
-            Main2(test);
+            Console.WriteLine("Use any of the following parameters:");
+            Console.WriteLine("-lists");
+            Console.WriteLine("-new <list name> <language 1> <language 2> .. <language n>");
+            Console.WriteLine("-add <list name>");
+            Console.WriteLine("-remove <list name> <language> <word 1> <word 2> .. <word n>");
+            Console.WriteLine("-words <listname> <sortByLanguage>");
+            Console.WriteLine("-count <listname>");
+            Console.WriteLine("-practice <listname>");
         }
     }
 }
