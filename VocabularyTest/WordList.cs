@@ -10,13 +10,13 @@ namespace VocabularyTest
         public string Name { get; }
         public string[] Languages { get; }
 
-        private List<Word> Words;
+        private List<Word> words;
 
         public WordList(string name, params string[] languages)
         {
             Name = name;
             Languages = languages;
-            Words = new List<Word>();
+            words = new List<Word>();
         }
 
         public static string[] GetLists()
@@ -27,6 +27,11 @@ namespace VocabularyTest
 
         public static WordList LoadList(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
             string path = WordListUtils.GeneratePath(name);
 
             if (!File.Exists(path))
@@ -61,13 +66,13 @@ namespace VocabularyTest
             string[] languagesFileFormatArray = new string[] { languagesFileFormat };
             File.WriteAllLines(path, languagesFileFormatArray);
 
-            for (int i = 0; i < Words.Count; i++)
+            for (int i = 0; i < words.Count; i++)
             {
                 string[] wordRainbow = new string[1];
 
-                for (int j = 0; j < Words[i].Translations.Length; j++)
+                for (int j = 0; j < words[i].Translations.Length; j++)
                 {
-                    wordRainbow[0] += Words[i].Translations[j] + ";";
+                    wordRainbow[0] += words[i].Translations[j] + ";";
                 }
                 File.AppendAllLines(path, wordRainbow);
             }
@@ -81,17 +86,17 @@ namespace VocabularyTest
             }
 
             Word word = new Word(translations);
-            Words.Add(word);
+            words.Add(word);
         }
 
         public bool Remove(int language, string translation)
         {
             bool itHappened = false;
-            for (int i = 0; i < Words.Count; i++)
+            for (int i = 0; i < words.Count; i++)
             {
-                if (Words[i].Translations[language].ToLower() == translation.ToLower())
+                if (words[i].Translations[language].ToLower() == translation.ToLower())
                 {
-                    Words.Remove(Words[i]);
+                    words.Remove(words[i]);
                     itHappened = true;
                     i--;
                 }
@@ -101,12 +106,12 @@ namespace VocabularyTest
 
         public int Count()
         {
-            return Words.Count;
+            return words.Count;
         }
 
         public void List(int sortByTranslation, Action<string[]> showTranslations)
         {
-            Word[] sorted = Words.OrderBy(w => w.Translations[sortByTranslation]).ToArray();
+            Word[] sorted = words.OrderBy(w => w.Translations[sortByTranslation]).ToArray();
             foreach (Word word in sorted)
             {
                 showTranslations(word.Translations);
@@ -126,7 +131,7 @@ namespace VocabularyTest
             {
                 toLanguage = random.Next(0, languages.Count);
             }
-            return new Word(fromLanguage, toLanguage, Words[word].Translations);
+            return new Word(fromLanguage, toLanguage, words[word].Translations);
         }
     }
 }
