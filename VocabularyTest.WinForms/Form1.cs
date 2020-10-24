@@ -6,13 +6,13 @@ using System.Windows.Forms;
 
 namespace VocabularyTest.WinForms
 {
-    public partial class Form1 : Form
+    public partial class VocabularyTestForm : Form
     {
         private static LatestSession latestSession;
         private static bool PracticeMode;
         private string CorrectTranslation;
 
-        public Form1()
+        public VocabularyTestForm()
         {
             InitializeComponent();
             WordListUtils.FolderCheck();
@@ -148,6 +148,8 @@ namespace VocabularyTest.WinForms
         {
             ClearGridAndName();
             ShowNumberOfWords();
+            ListNamesBox.SelectedItem = null;
+            PracticeButton.Enabled = false;
         }
 
         private void ListNamesBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -181,22 +183,25 @@ namespace VocabularyTest.WinForms
 
         private void DuplicateButton_Click(object sender, EventArgs e)
         {
-            string oldPath = WordListUtils.GeneratePath(ListNamesBox.SelectedItem.ToString());
-            string originalContent = File.ReadAllText(oldPath);
-
-            string nameSuffix = "_copy";
-            int copyCount = 1;
-            
-            while (File.Exists(WordListUtils.GeneratePath(ListNamesBox.SelectedItem + nameSuffix)))
+            if (ListNamesBox.SelectedItem != null)
             {
-                copyCount++;
-                nameSuffix = "_copy" + copyCount;
+                string oldPath = WordListUtils.GeneratePath(ListNamesBox.SelectedItem.ToString());
+                string originalContent = File.ReadAllText(oldPath);
+
+                string nameSuffix = "_copy";
+                int copyCount = 1;
+            
+                while (File.Exists(WordListUtils.GeneratePath(ListNamesBox.SelectedItem + nameSuffix)))
+                {
+                    copyCount++;
+                    nameSuffix = "_copy" + copyCount;
+                }
+
+                string newPath = WordListUtils.GeneratePath(ListNamesBox.SelectedItem + nameSuffix);
+                File.WriteAllText(newPath, originalContent);
+
+                RefreshListNamesBox();
             }
-
-            string newPath = WordListUtils.GeneratePath(ListNamesBox.SelectedItem + nameSuffix);
-            File.WriteAllText(newPath, originalContent);
-
-            RefreshListNamesBox();
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -205,6 +210,12 @@ namespace VocabularyTest.WinForms
             foreach (DataGridViewTextBoxColumn column in WordListGrid.Columns)
             {
                 languages.Add(column.HeaderText);
+            }
+
+            if (languages.Count < 2)
+            {
+                MessageBox.Show("Could not save list. The list must have at least two languages.");
+                return;
             }
 
             WordList currentList = new WordList(NameBox.Text, languages.ToArray());
@@ -263,11 +274,6 @@ namespace VocabularyTest.WinForms
                 WordListGrid.Columns.Add(NewLanguageBox.Text, NewLanguageBox.Text);
                 NewLanguageBox.Text = "";
             }
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void PracticeButton_Click(object sender, EventArgs e)

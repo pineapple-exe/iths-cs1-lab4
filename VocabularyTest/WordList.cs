@@ -41,7 +41,7 @@ namespace VocabularyTest
 
             string[] fileContent = File.ReadAllLines(path);
 
-            if (!(fileContent.Length > 0))
+            if (fileContent.Length < 1)
             {
                 throw new Exception($"Wordlist file {name} does not contain any languages.");
             }

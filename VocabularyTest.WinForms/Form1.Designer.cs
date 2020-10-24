@@ -1,6 +1,6 @@
 ﻿namespace VocabularyTest.WinForms
 {
-    partial class Form1
+    partial class VocabularyTestForm
     {
         /// <summary>
         /// Required designer variable.
@@ -48,6 +48,7 @@
             this.RemoveWordButton = new System.Windows.Forms.Button();
             this.NamePrecedesLanguageLabel = new System.Windows.Forms.Label();
             this.PracticeTab = new System.Windows.Forms.TabPage();
+            this.NoWordsLabel = new System.Windows.Forms.Label();
             this.LatestSessionLabel = new System.Windows.Forms.Label();
             this.SessionInfoLabel = new System.Windows.Forms.Label();
             this.CorrectOrNotLabel = new System.Windows.Forms.Label();
@@ -60,7 +61,6 @@
             this.NoPeekingLabelTimer = new System.Windows.Forms.Timer(this.components);
             this.CorrectOrNotTimer = new System.Windows.Forms.Timer(this.components);
             this.NamePrecedesLanguageTimer = new System.Windows.Forms.Timer(this.components);
-            this.NoWordsLabel = new System.Windows.Forms.Label();
             this.NoWordsTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.WordListGrid)).BeginInit();
             this.TabControl.SuspendLayout();
@@ -285,6 +285,16 @@
             this.PracticeTab.TabIndex = 1;
             this.PracticeTab.Text = "Practice";
             // 
+            // NoWordsLabel
+            // 
+            this.NoWordsLabel.AutoSize = true;
+            this.NoWordsLabel.Location = new System.Drawing.Point(359, 187);
+            this.NoWordsLabel.Name = "NoWordsLabel";
+            this.NoWordsLabel.Size = new System.Drawing.Size(126, 18);
+            this.NoWordsLabel.TabIndex = 25;
+            this.NoWordsLabel.Text = "Contains no words.";
+            this.NoWordsLabel.Visible = false;
+            // 
             // LatestSessionLabel
             // 
             this.LatestSessionLabel.AutoSize = true;
@@ -392,31 +402,22 @@
             this.NamePrecedesLanguageTimer.Interval = 4000;
             this.NamePrecedesLanguageTimer.Tick += new System.EventHandler(this.NamePrecedesLanguageTimer_Tick);
             // 
-            // NoWordsLabel
-            // 
-            this.NoWordsLabel.AutoSize = true;
-            this.NoWordsLabel.Location = new System.Drawing.Point(359, 187);
-            this.NoWordsLabel.Name = "NoWordsLabel";
-            this.NoWordsLabel.Size = new System.Drawing.Size(126, 18);
-            this.NoWordsLabel.TabIndex = 25;
-            this.NoWordsLabel.Text = "Contains no words.";
-            this.NoWordsLabel.Visible = false;
-            // 
             // NoWordsTimer
             // 
             this.NoWordsTimer.Interval = 4000;
             this.NoWordsTimer.Tick += new System.EventHandler(this.NoWordsTimer_Tick);
             // 
-            // Form1
+            // VocabularyTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(961, 788);
+            this.ClientSize = new System.Drawing.Size(902, 508);
             this.Controls.Add(this.TabControl);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.Name = "VocabularyTestForm";
+            this.Text = "VocabularyTest";
             ((System.ComponentModel.ISupportInitialize)(this.WordListGrid)).EndInit();
             this.TabControl.ResumeLayout(false);
             this.ListLabTab.ResumeLayout(false);
